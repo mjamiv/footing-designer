@@ -2,6 +2,8 @@
 
 Spread Footing Designer Pro — Footing Analysis and Design for structural engineers (preliminary use only).
 
+access app at: https://mjamiv.github.io/footing-designer/
+
 ## What this program does
 
 This is a single-file web application (index.html) that performs preliminary analysis and design of rectangular spread footings using simplified methods and checks per ACI 318-19. Key capabilities:
