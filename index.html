@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,647 +8,643 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
-        
-        * { font-family: 'Inter', sans-serif; }
-        .mono { font-family: 'JetBrains Mono', monospace; }
-        
-        .glass {
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+
+        :root {
+            --color-bg: #050505;
+            --color-panel: #111111;
+            --color-border: #333333;
+            --color-gold: #D4AF37;
+            --color-gold-dim: #997e28;
+            --color-orange: #F97316;
+            --color-text-main: #FFFFFF;
+            --color-text-muted: #9CA3AF;
         }
-        
-        .glass-dark {
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+
+        * {
+            font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
         }
-        
-        .gradient-bg {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-            min-height: 100vh;
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
         }
-        
-        .panel {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
-            border: 1px solid rgba(71, 85, 105, 0.5);
+
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-text-main);
+            height: 100vh;
+            overflow: hidden;
+            /* Prevent scrolling on the body */
+            display: flex;
+            flex-direction: column;
         }
-        
+
+        /* Glass / Panel Styles */
+        .glass-panel {
+            background: linear-gradient(145deg, rgba(20, 20, 20, 0.95), rgba(10, 10, 10, 0.98));
+            border: 1px solid var(--color-border);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+        }
+
         .panel-header {
-            background: linear-gradient(90deg, rgba(59, 130, 246, 0.1), transparent);
-            border-bottom: 1px solid rgba(71, 85, 105, 0.5);
+            border-bottom: 1px solid var(--color-border);
+            background: linear-gradient(90deg, rgba(212, 175, 55, 0.05), transparent);
         }
-        
+
+        /* Inputs */
         .input-field {
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid rgba(71, 85, 105, 0.6);
+            background: #0a0a0a;
+            border: 1px solid #333;
+            color: white;
             transition: all 0.2s ease;
         }
-        
+
         .input-field:focus {
-            background: rgba(30, 41, 59, 0.9);
-            border-color: #3b82f6;
+            background: #000;
+            border-color: var(--color-gold);
             outline: none;
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+            box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.3);
         }
-        
-        .input-field:hover:not(:focus) {
-            border-color: rgba(100, 116, 139, 0.8);
+
+        .input-group label {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            letter-spacing: 0.02em;
         }
-        
-        .check-pass { 
-            background: rgba(34, 197, 94, 0.08);
-            border: 1px solid rgba(34, 197, 94, 0.3);
+
+        .input-group .unit {
+            font-size: 0.7rem;
+            color: #555;
+            width: 35px;
         }
-        
-        .check-fail { 
-            background: rgba(239, 68, 68, 0.08);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-        }
-        
-        .check-warn {
-            background: rgba(234, 179, 8, 0.08);
-            border: 1px solid rgba(234, 179, 8, 0.3);
-        }
-        
-        .progress-ring {
-            transform: rotate(-90deg);
-            transition: stroke-dashoffset 0.6s ease;
-        }
-        
-        .canvas-container {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border: 1px solid rgba(71, 85, 105, 0.5);
-        }
-        
-        .tab-btn {
+
+        /* Buttons used for Primary actions */
+        .btn-gold {
+            background: linear-gradient(135deg, #D4AF37 0%, #B4941F 100%);
+            color: #000;
+            font-weight: 600;
+            border: none;
             transition: all 0.2s;
         }
-        
-        .tab-btn.active {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            transition: all 0.2s;
-        }
-        
-        .btn-primary:hover {
-            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+
+        .btn-gold:hover {
+            filter: brightness(1.1);
             transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
         }
-        
+
         .btn-secondary {
-            background: rgba(51, 65, 85, 0.8);
-            border: 1px solid rgba(71, 85, 105, 0.6);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #333;
+            color: #ccc;
             transition: all 0.2s;
         }
-        
+
         .btn-secondary:hover {
-            background: rgba(71, 85, 105, 0.8);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #555;
+            color: white;
         }
-        
+
+        /* Tabs */
+        .tab-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: #888;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            color: #ccc;
+        }
+
+        .tab-btn.active {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid var(--color-gold-dim);
+            color: var(--color-gold);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
+        }
+
+        /* Status Checks */
+        .check-item {
+            border: 1px solid #222;
+            background: rgba(255, 255, 255, 0.02);
+            transition: all 0.2s;
+        }
+
+        .check-pass {
+            border-left: 3px solid #22c55e;
+        }
+
+        .check-fail {
+            border-left: 3px solid #ef4444;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--color-gold-dim);
+        }
+
+        /* Layout Helpers */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr 340px;
+            /* Fixed sidebars, flexible center */
+            gap: 16px;
+            height: 100%;
+            overflow: hidden;
+            padding: 16px;
+            padding-top: 0;
+        }
+
+        .scroll-y {
+            overflow-y: auto;
+            overflow-x: hidden;
+            height: 100%;
+        }
+
+        /* Notification */
         .notification {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 12px 20px;
-            border-radius: 8px;
-            z-index: 1000;
-            transform: translateX(400px);
-            transition: transform 0.3s ease;
-            font-size: 14px;
+            top: 24px;
+            right: 24px;
+            padding: 12px 24px;
+            border-radius: 4px;
+            z-index: 9999;
+            transform: translateX(120%);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            font-weight: 500;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border-left: 4px solid;
+            background: #1a1a1a;
+            color: white;
         }
-        
-        .notification.show { transform: translateX(0); }
-        .notification.success { background: #166534; border: 1px solid #22c55e; }
-        .notification.error { background: #991b1b; border: 1px solid #ef4444; }
-        
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.5); }
-        ::-webkit-scrollbar-thumb { background: rgba(71, 85, 105, 0.8); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(100, 116, 139, 0.8); }
-        
-        .input-group {
-            display: grid;
-            grid-template-columns: 1fr auto auto;
-            gap: 8px;
-            align-items: center;
+
+        .notification.show {
+            transform: translateX(0);
         }
-        
-        .input-group label {
-            font-size: 13px;
-            color: #94a3b8;
+
+        .notification.success {
+            border-color: #22c55e;
         }
-        
-        .input-group input {
-            width: 80px;
-            text-align: right;
+
+        .notification.error {
+            border-color: #ef4444;
         }
-        
-        .input-group .unit {
-            font-size: 12px;
-            color: #64748b;
-            width: 40px;
-        }
-        
-        .result-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(71, 85, 105, 0.3);
-        }
-        
-        .result-row:last-child {
-            border-bottom: none;
-        }
-        
-        .result-label {
-            font-size: 13px;
-            color: #94a3b8;
-        }
-        
-        .result-value {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 14px;
-            color: #e2e8f0;
-        }
-        
+
         @media print {
-            .no-print { display: none !important; }
-            .gradient-bg { background: white !important; }
-            * { color: black !important; }
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                height: auto;
+                overflow: visible;
+                background: white;
+                color: black;
+            }
         }
     </style>
 </head>
-<body class="gradient-bg text-white">
+
+<body>
     <div id="notification" class="notification">
         <span id="notification-text"></span>
     </div>
 
-    <div class="container mx-auto px-4 py-4 max-w-[1600px]">
-        <!-- Professional Header -->
-        <header class="panel rounded-lg mb-4">
-            <div class="panel-header px-6 py-3 rounded-t-lg flex justify-between items-center">
-                <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-lg">SF</div>
-                    <div>
-                        <h1 class="text-xl font-bold text-white">Spread Footing Designer Pro</h1>
-                        <p class="text-xs text-slate-400">Shallow Foundation Analysis & Design per ACI 318-19</p>
+    <!-- Header -->
+    <header class="h-14 border-b border-[#333] flex items-center justify-between px-6 bg-[#0a0a0a] flex-shrink-0">
+        <div class="flex items-center gap-3">
+            <div
+                class="w-8 h-8 rounded bg-gradient-to-br from-[#D4AF37] to-[#8a7018] flex items-center justify-center font-bold text-black text-sm">
+                SF</div>
+            <div>
+                <h1 class="font-bold text-white tracking-tight">Spread Footing <span
+                        style="color: var(--color-gold);">Pro</span></h1>
+            </div>
+        </div>
+        <div class="flex items-center gap-6 text-sm">
+            <div class="flex items-center gap-2">
+                <span class="text-xs text-[#666] uppercase tracking-wider">Project</span>
+                <input type="text" id="projectName" value="Foundation F-1"
+                    class="bg-transparent border-b border-[#333] text-white text-xs py-1 focus:border-[#D4AF37] outline-none transition-colors">
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-xs text-[#666] uppercase tracking-wider">Engineer</span>
+                <input type="text" id="engineerName" placeholder="Name"
+                    class="bg-transparent border-b border-[#333] text-white text-xs py-1 focus:border-[#D4AF37] outline-none transition-colors w-24">
+            </div>
+            <div class="text-[#444] mono text-xs" id="currentDate"></div>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="grid-layout">
+
+        <!-- LEFT COLUMN: INPUTS -->
+        <div class="scroll-y py-4 space-y-4">
+            <!-- Applied Loads -->
+            <div class="glass-panel rounded-lg p-4">
+                <h2 class="text-xs font-bold text-[#D4AF37] uppercase mb-4 tracking-wider flex items-center gap-2">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                    </svg>
+                    Applied Loads
+                </h2>
+                <div class="space-y-3">
+                    <div class="input-group">
+                        <label>Axial Load, P</label>
+                        <input type="number" id="axialLoad" value="270"
+                            class="input-field rounded px-2 py-1 mono text-sm" oninput="calculate()">
+                        <span class="unit">kips</span>
                     </div>
-                </div>
-                <div class="flex items-center gap-6 text-sm">
-                    <div class="text-right">
-                        <div class="text-[10px] text-slate-500 uppercase tracking-wider">Project</div>
-                        <input type="text" id="projectName" value="Foundation F-1" class="input-field px-2 py-1 rounded text-sm w-40">
+                    <div class="input-group">
+                        <label>Moment X, M<sub>x</sub></label>
+                        <input type="number" id="momentX" value="110" class="input-field rounded px-2 py-1 mono text-sm"
+                            oninput="calculate()">
+                        <span class="unit">k-ft</span>
                     </div>
-                    <div class="text-right">
-                        <div class="text-[10px] text-slate-500 uppercase tracking-wider">Engineer</div>
-                        <input type="text" id="engineerName" value="" placeholder="Your Name" class="input-field px-2 py-1 rounded text-sm w-32">
+                    <div class="input-group">
+                        <label>Moment Y, M<sub>y</sub></label>
+                        <input type="number" id="momentY" value="75" class="input-field rounded px-2 py-1 mono text-sm"
+                            oninput="calculate()">
+                        <span class="unit">k-ft</span>
                     </div>
-                    <div class="text-right">
-                        <div class="text-[10px] text-slate-500 uppercase tracking-wider">Date</div>
-                        <div class="text-slate-300 mono text-sm" id="currentDate"></div>
+                    <div class="input-group">
+                        <label>Shear, H</label>
+                        <input type="number" id="horizontalForce" value="12"
+                            class="input-field rounded px-2 py-1 mono text-sm" oninput="calculate()">
+                        <span class="unit">kips</span>
+                    </div>
+
+                    <div class="pt-3 mt-2 border-t border-[#222]">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="text-[10px] text-[#555] block mb-1">Dead LF</label>
+                                <input type="number" id="lfDead" value="1.2" step="0.1"
+                                    class="input-field w-full rounded px-2 py-1 mono text-xs" oninput="calculate()">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-[#555] block mb-1">Live LF</label>
+                                <input type="number" id="lfLive" value="1.6" step="0.1"
+                                    class="input-field w-full rounded px-2 py-1 mono text-xs" oninput="calculate()">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            
-            <!-- Quick Status Bar -->
-            <div class="px-6 py-3 flex items-center justify-between">
+
+            <!-- Geometry -->
+            <div class="glass-panel rounded-lg p-4">
+                <h2 class="text-xs font-bold text-[#D4AF37] uppercase mb-4 tracking-wider flex items-center gap-2">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                    Geometry
+                </h2>
+                <div class="space-y-3">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-[11px] text-[#777] block mb-1">Length (ft)</label>
+                            <input type="number" id="footingL" value="10" step="0.5"
+                                class="input-field w-full rounded px-2 py-1 mono text-sm" oninput="calculate()">
+                        </div>
+                        <div>
+                            <label class="text-[11px] text-[#777] block mb-1">Width (ft)</label>
+                            <input type="number" id="footingB" value="10" step="0.5"
+                                class="input-field w-full rounded px-2 py-1 mono text-sm" oninput="calculate()">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Thickness, h</label>
+                        <input type="number" id="footingH" value="24" step="1"
+                            class="input-field rounded px-2 py-1 mono text-sm" oninput="calculate()">
+                        <span class="unit">in</span>
+                    </div>
+                    <div class="input-group">
+                        <label>Embedment</label>
+                        <input type="number" id="embedDepth" value="4" step="0.5"
+                            class="input-field rounded px-2 py-1 mono text-sm" oninput="calculate()">
+                        <span class="unit">ft</span>
+                    </div>
+
+                    <div class="pt-3 mt-2 border-t border-[#222]">
+                        <div class="text-[10px] text-[#555] uppercase mb-2">Column Size</div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="input-group" style="grid-template-columns: 1fr auto;">
+                                <label>L</label>
+                                <input type="number" id="colL" value="20"
+                                    class="input-field rounded px-1 py-0.5 mono text-xs w-full" oninput="calculate()">
+                            </div>
+                            <div class="input-group" style="grid-template-columns: 1fr auto;">
+                                <label>W</label>
+                                <input type="number" id="colB" value="20"
+                                    class="input-field rounded px-1 py-0.5 mono text-xs w-full" oninput="calculate()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Parameters -->
+            <div class="glass-panel rounded-lg p-4">
+                <h2 class="text-xs font-bold text-[#D4AF37] uppercase mb-4 tracking-wider">Parameters</h2>
+                <div class="space-y-3">
+                    <div class="input-group">
+                        <label>Conc. f'c</label>
+                        <input type="number" id="fc" value="4000" step="500"
+                            class="input-field rounded px-2 py-1 mono text-sm" oninput="calculate()">
+                        <span class="unit">psi</span>
+                    </div>
+                    <div class="input-group">
+                        <label>Steel fy</label>
+                        <input type="number" id="fy" value="60000" step="5000"
+                            class="input-field rounded px-2 py-1 mono text-sm" oninput="calculate()">
+                        <span class="unit">psi</span>
+                    </div>
+                    <div class="input-group">
+                        <label>Allow. Bear.</label>
+                        <input type="number" id="qa" value="4.0" step="0.5"
+                            class="input-field rounded px-2 py-1 mono text-sm" oninput="calculate()">
+                        <span class="unit">ksf</span>
+                    </div>
+                    <div class="input-group">
+                        <label>Friction μ</label>
+                        <input type="number" id="friction" value="0.45" step="0.05"
+                            class="input-field rounded px-2 py-1 mono text-sm" oninput="calculate()">
+                        <span class="unit">-</span>
+                    </div>
+                    <div class="input-group">
+                        <label>Soil γ</label>
+                        <input type="number" id="soilGamma" value="120" step="5"
+                            class="input-field rounded px-2 py-1 mono text-sm" oninput="calculate()">
+                        <span class="unit">pcf</span>
+                    </div>
+                    <div class="input-group">
+                        <label>Cover</label>
+                        <input type="number" id="cover" value="3" step="0.5"
+                            class="input-field rounded px-2 py-1 mono text-sm" oninput="calculate()">
+                        <span class="unit">in</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="no-print pt-2">
+                <button onclick="autoDesign()"
+                    class="w-full py-3 btn-gold rounded shadow-lg flex items-center justify-center gap-2 mb-3">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    AUTO-OPTIMIZE
+                </button>
+                <div class="flex gap-2">
+                    <button onclick="resetDesign()" class="flex-1 py-1.5 btn-secondary rounded text-xs">Reset</button>
+                    <button onclick="printReport()" class="flex-1 py-1.5 btn-secondary rounded text-xs">Print</button>
+                    <button onclick="exportCalcs()" class="flex-1 py-1.5 btn-secondary rounded text-xs">Export</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CENTER COLUMN: VISUALIZATION -->
+        <div class="flex flex-col h-full py-4 min-w-0">
+            <!-- Stats Bar -->
+            <div
+                class="glass-panel rounded-t-lg p-4 flex items-center justify-between flex-shrink-0 z-10 relative border-b-0">
                 <div class="flex gap-8">
-                    <div class="text-center">
-                        <div class="text-2xl font-bold mono text-blue-400" id="stat-load">270</div>
-                        <div class="text-[10px] text-slate-500 uppercase">Applied Load (kips)</div>
+                    <div>
+                        <div class="text-[10px] text-[#666] uppercase mb-0.5">Bearing Pressure</div>
+                        <div class="text-xl font-bold mono text-white" id="stat-bearing">75%</div>
                     </div>
-                    <div class="text-center">
-                        <div class="text-2xl font-bold mono" id="stat-bearing">75%</div>
-                        <div class="text-[10px] text-slate-500 uppercase">Bearing Utilized</div>
+                    <div>
+                        <div class="text-[10px] text-[#666] uppercase mb-0.5">Footing Size</div>
+                        <div class="text-xl font-bold mono text-[#D4AF37]" id="stat-size">10' × 10'</div>
                     </div>
-                    <div class="text-center">
-                        <div class="text-2xl font-bold mono text-purple-400" id="stat-size">10'-0" × 10'-0"</div>
-                        <div class="text-[10px] text-slate-500 uppercase">Footing Size</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-2xl font-bold mono text-cyan-400" id="stat-depth">24"</div>
-                        <div class="text-[10px] text-slate-500 uppercase">Thickness</div>
+                    <div>
+                        <div class="text-[10px] text-[#666] uppercase mb-0.5">Thickness</div>
+                        <div class="text-xl font-bold mono text-[#ccc]" id="stat-depth">24"</div>
                     </div>
                 </div>
+
                 <div class="flex items-center gap-4">
-                    <div id="overall-status" class="px-6 py-2 rounded-lg font-bold text-lg flex items-center gap-2">
-                        <span id="status-icon">✓</span>
-                        <span id="status-text">DESIGN OK</span>
-                    </div>
-                    <div class="text-xs text-slate-500" id="check-summary">6/6 Checks Pass</div>
-                </div>
-            </div>
-        </header>
-
-        <div class="grid grid-cols-12 gap-4">
-            <!-- Left Panel - Inputs -->
-            <div class="col-span-3 space-y-4">
-                <!-- Applied Loads -->
-                <div class="panel rounded-lg">
-                    <div class="panel-header px-4 py-2 rounded-t-lg">
-                        <h2 class="text-sm font-semibold text-slate-200">Applied Loads (Service Level)</h2>
-                    </div>
-                    <div class="p-4 space-y-3">
-                        <div class="input-group">
-                            <label>Axial Load, P<sub>D+L</sub></label>
-                            <input type="number" id="axialLoad" value="270" class="input-field px-2 py-1.5 rounded mono" oninput="calculate()">
-                            <span class="unit">kips</span>
-                        </div>
-                        <div class="input-group">
-                            <label>Moment X, M<sub>x</sub></label>
-                            <input type="number" id="momentX" value="110" class="input-field px-2 py-1.5 rounded mono" oninput="calculate()">
-                            <span class="unit">kip-ft</span>
-                        </div>
-                        <div class="input-group">
-                            <label>Moment Y, M<sub>y</sub></label>
-                            <input type="number" id="momentY" value="75" class="input-field px-2 py-1.5 rounded mono" oninput="calculate()">
-                            <span class="unit">kip-ft</span>
-                        </div>
-                        <div class="input-group">
-                            <label>Lateral Force, H</label>
-                            <input type="number" id="horizontalForce" value="12" class="input-field px-2 py-1.5 rounded mono" oninput="calculate()">
-                            <span class="unit">kips</span>
-                        </div>
-                        <div class="border-t border-slate-700 pt-3 mt-3">
-                            <div class="text-xs text-slate-500 mb-2">Load Factors (for Strength Design)</div>
-                            <div class="grid grid-cols-2 gap-2">
-                                <div class="input-group">
-                                    <label>Dead Load Factor</label>
-                                    <input type="number" id="lfDead" value="1.2" step="0.1" class="input-field px-2 py-1 rounded mono text-xs w-16" oninput="calculate()">
-                                </div>
-                                <div class="input-group">
-                                    <label>Live Load Factor</label>
-                                    <input type="number" id="lfLive" value="1.6" step="0.1" class="input-field px-2 py-1 rounded mono text-xs w-16" oninput="calculate()">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Footing Geometry -->
-                <div class="panel rounded-lg">
-                    <div class="panel-header px-4 py-2 rounded-t-lg">
-                        <h2 class="text-sm font-semibold text-slate-200">Footing Geometry</h2>
-                    </div>
-                    <div class="p-4 space-y-3">
-                        <div class="input-group">
-                            <label>Length, L</label>
-                            <input type="number" id="footingL" value="10" step="0.5" class="input-field px-2 py-1.5 rounded mono" oninput="calculate()">
-                            <span class="unit">ft</span>
-                        </div>
-                        <div class="input-group">
-                            <label>Width, B</label>
-                            <input type="number" id="footingB" value="10" step="0.5" class="input-field px-2 py-1.5 rounded mono" oninput="calculate()">
-                            <span class="unit">ft</span>
-                        </div>
-                        <div class="input-group">
-                            <label>Thickness, h</label>
-                            <input type="number" id="footingH" value="24" step="1" class="input-field px-2 py-1.5 rounded mono" oninput="calculate()">
-                            <span class="unit">in</span>
-                        </div>
-                        <div class="input-group">
-                            <label>Embedment Depth, D<sub>f</sub></label>
-                            <input type="number" id="embedDepth" value="4" step="0.5" class="input-field px-2 py-1.5 rounded mono" oninput="calculate()">
-                            <span class="unit">ft</span>
-                        </div>
-                        <div class="border-t border-slate-700 pt-3 mt-3">
-                            <div class="text-xs text-slate-500 mb-2">Column/Pedestal</div>
-                            <div class="grid grid-cols-2 gap-3">
-                                <div class="input-group">
-                                    <label>Col. Length</label>
-                                    <input type="number" id="colL" value="20" step="2" class="input-field px-2 py-1 rounded mono text-sm w-16" oninput="calculate()">
-                                    <span class="unit text-xs">in</span>
-                                </div>
-                                <div class="input-group">
-                                    <label>Col. Width</label>
-                                    <input type="number" id="colB" value="20" step="2" class="input-field px-2 py-1 rounded mono text-sm w-16" oninput="calculate()">
-                                    <span class="unit text-xs">in</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Material Properties -->
-                <div class="panel rounded-lg">
-                    <div class="panel-header px-4 py-2 rounded-t-lg">
-                        <h2 class="text-sm font-semibold text-slate-200">Material Properties</h2>
-                    </div>
-                    <div class="p-4 space-y-3">
-                        <div class="input-group">
-                            <label>Concrete, f'<sub>c</sub></label>
-                            <input type="number" id="fc" value="4000" step="500" class="input-field px-2 py-1.5 rounded mono" oninput="calculate()">
-                            <span class="unit">psi</span>
-                        </div>
-                        <div class="input-group">
-                            <label>Reinforcing, f<sub>y</sub></label>
-                            <input type="number" id="fy" value="60000" step="5000" class="input-field px-2 py-1.5 rounded mono" oninput="calculate()">
-                            <span class="unit">psi</span>
-                        </div>
-                        <div class="input-group">
-                            <label>Clear Cover</label>
-                            <input type="number" id="cover" value="3" step="0.5" class="input-field px-2 py-1.5 rounded mono" oninput="calculate()">
-                            <span class="unit">in</span>
-                        </div>
-                        <div class="border-t border-slate-700 pt-3 mt-3">
-                            <div class="text-xs text-slate-500 mb-2">Soil Parameters</div>
-                            <div class="input-group">
-                                <label>Allowable Bearing, q<sub>a</sub></label>
-                                <input type="number" id="qa" value="4.0" step="0.5" class="input-field px-2 py-1.5 rounded mono" oninput="calculate()">
-                                <span class="unit">ksf</span>
-                            </div>
-                            <div class="input-group mt-2">
-                                <label>Friction Coefficient, μ</label>
-                                <input type="number" id="friction" value="0.45" step="0.05" class="input-field px-2 py-1.5 rounded mono" oninput="calculate()">
-                                <span class="unit">—</span>
-                            </div>
-                            <div class="input-group mt-2">
-                                <label>Soil Unit Weight, γ<sub>s</sub></label>
-                                <input type="number" id="soilGamma" value="120" step="5" class="input-field px-2 py-1.5 rounded mono" oninput="calculate()">
-                                <span class="unit">pcf</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="space-y-2 no-print">
-                    <button onclick="autoDesign()" class="w-full py-3 btn-primary rounded-lg font-semibold flex items-center justify-center gap-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                        </svg>
-                        Auto-Size Footing
-                    </button>
-                    <div class="grid grid-cols-3 gap-2">
-                        <button onclick="resetDesign()" class="py-2 btn-secondary rounded-lg text-sm">Reset</button>
-                        <button onclick="printReport()" class="py-2 btn-secondary rounded-lg text-sm">Print</button>
-                        <button onclick="exportCalcs()" class="py-2 btn-secondary rounded-lg text-sm">Export</button>
+                    <div id="overall-status"
+                        class="px-4 py-1.5 rounded bg-[#111] border border-[#333] flex items-center gap-2">
+                        <span id="status-icon" class="text-lg">✓</span>
+                        <span id="status-text" class="text-sm font-bold tracking-wide">OK</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Center Panel - Visualization -->
-            <div class="col-span-5">
-                <div class="panel rounded-lg h-full">
-                    <div class="panel-header px-4 py-2 rounded-t-lg flex justify-between items-center">
-                        <h2 class="text-sm font-semibold text-slate-200">3D Soil Stress Visualization</h2>
-                        <div class="flex gap-1">
-                            <button onclick="setView('stress3d')" id="btn-stress3d" class="tab-btn active px-3 py-1 rounded text-xs">3D Stress</button>
-                            <button onclick="setView('section')" id="btn-section" class="tab-btn px-3 py-1 rounded text-xs bg-slate-700">Section</button>
-                            <button onclick="setView('plan')" id="btn-plan" class="tab-btn px-3 py-1 rounded text-xs bg-slate-700">Plan</button>
-                            <button onclick="setView('rebar')" id="btn-rebar" class="tab-btn px-3 py-1 rounded text-xs bg-slate-700">Reinf.</button>
-                        </div>
-                    </div>
-                    
-                    <div class="p-4">
-                        <div class="canvas-container rounded-lg relative" style="height: 420px;">
-                            <canvas id="mainCanvas" class="w-full h-full"></canvas>
-                            
-                            <!-- Controls Overlay -->
-                            <div class="absolute top-3 left-3 glass-dark rounded-lg p-3 no-print">
-                                <div class="text-[10px] text-slate-400 uppercase mb-1">View Rotation</div>
-                                <input type="range" id="rotationSlider" min="0" max="360" value="45" 
-                                    class="w-24 h-1.5 rounded cursor-pointer" oninput="updateRotation()" style="accent-color: #3b82f6;">
-                                <div class="text-xs text-center mono mt-1" id="rotation-val">45°</div>
-                            </div>
-                            
-                            <div class="absolute top-3 right-3 glass-dark rounded-lg p-3">
-                                <div class="text-[10px] text-slate-400 uppercase mb-2">Bearing Pressure (ksf)</div>
-                                <div class="flex gap-2 items-center">
-                                    <div class="w-4 h-24 rounded" style="background: linear-gradient(to bottom, #ef4444, #f97316, #eab308, #22c55e, #0ea5e9);"></div>
-                                    <div class="flex flex-col justify-between h-24 text-xs mono text-slate-300">
-                                        <span id="legend-max">4.0</span>
-                                        <span id="legend-mid">2.0</span>
-                                        <span id="legend-min">0</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Corner Pressures -->
-                        <div class="grid grid-cols-4 gap-3 mt-4">
-                            <div class="bg-slate-800/50 rounded-lg p-3 text-center border border-slate-700">
-                                <div class="text-[10px] text-slate-500 uppercase">q₁ (Corner 1)</div>
-                                <div class="text-lg font-bold mono text-red-400" id="q1-val">—</div>
-                                <div class="text-[10px] text-slate-500">ksf</div>
-                            </div>
-                            <div class="bg-slate-800/50 rounded-lg p-3 text-center border border-slate-700">
-                                <div class="text-[10px] text-slate-500 uppercase">q₂ (Corner 2)</div>
-                                <div class="text-lg font-bold mono text-orange-400" id="q2-val">—</div>
-                                <div class="text-[10px] text-slate-500">ksf</div>
-                            </div>
-                            <div class="bg-slate-800/50 rounded-lg p-3 text-center border border-slate-700">
-                                <div class="text-[10px] text-slate-500 uppercase">q₃ (Corner 3)</div>
-                                <div class="text-lg font-bold mono text-yellow-400" id="q3-val">—</div>
-                                <div class="text-[10px] text-slate-500">ksf</div>
-                            </div>
-                            <div class="bg-slate-800/50 rounded-lg p-3 text-center border border-slate-700">
-                                <div class="text-[10px] text-slate-500 uppercase">q₄ (Corner 4)</div>
-                                <div class="text-lg font-bold mono text-green-400" id="q4-val">—</div>
-                                <div class="text-[10px] text-slate-500">ksf</div>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Canvas Area -->
+            <div class="glass-panel border-t-0 rounded-b-lg flex-1 relative overflow-hidden bg-[#0e0e0e]">
+                <canvas id="mainCanvas" class="w-full h-full block"></canvas>
+
+                <!-- View Controls -->
+                <div class="absolute top-4 left-4 flex gap-1">
+                    <button onclick="setView('stress3d')" id="btn-stress3d"
+                        class="tab-btn active px-3 py-1 text-xs font-medium rounded-l backdrop-blur-md">3D View</button>
+                    <button onclick="setView('section')" id="btn-section"
+                        class="tab-btn px-3 py-1 text-xs font-medium backdrop-blur-md">Section</button>
+                    <button onclick="setView('plan')" id="btn-plan"
+                        class="tab-btn px-3 py-1 text-xs font-medium backdrop-blur-md">Plan</button>
+                    <button onclick="setView('rebar')" id="btn-rebar"
+                        class="tab-btn px-3 py-1 text-xs font-medium rounded-r backdrop-blur-md">Rebar</button>
                 </div>
-            </div>
 
-            <!-- Right Panel - Results -->
-            <div class="col-span-4 space-y-4">
-                <!-- Stability Checks -->
-                <div class="panel rounded-lg">
-                    <div class="panel-header px-4 py-2 rounded-t-lg">
-                        <h2 class="text-sm font-semibold text-slate-200">Stability & Serviceability Checks</h2>
+                <!-- Rotation Control (only for 3D) -->
+                <div class="absolute bottom-4 left-4 glass-panel rounded-lg p-3 w-48">
+                    <div class="flex justify-between text-[10px] text-[#666] uppercase mb-1">
+                        <span>Rotation</span>
+                        <span id="rotation-val" class="text-[#D4AF37] mono">45°</span>
                     </div>
-                    <div class="p-4 space-y-2">
-                        <div id="check-bearing" class="check-pass rounded-lg p-3">
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center gap-2">
-                                    <span class="text-green-400 text-lg" id="bearing-icon">✓</span>
-                                    <div>
-                                        <div class="text-sm font-medium">Bearing Capacity</div>
-                                        <div class="text-xs text-slate-400">q<sub>max</sub> ≤ q<sub>allowable</sub></div>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <span class="text-xs px-2 py-0.5 rounded bg-green-500/20 text-green-400" id="bearing-status">OK</span>
-                                    <div class="text-xs mono text-slate-400 mt-1" id="bearing-detail">—</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div id="check-uplift" class="check-pass rounded-lg p-3">
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center gap-2">
-                                    <span class="text-green-400 text-lg" id="uplift-icon">✓</span>
-                                    <div>
-                                        <div class="text-sm font-medium">Uplift / Tension</div>
-                                        <div class="text-xs text-slate-400">q<sub>min</sub> ≥ 0</div>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <span class="text-xs px-2 py-0.5 rounded bg-green-500/20 text-green-400" id="uplift-status">OK</span>
-                                    <div class="text-xs mono text-slate-400 mt-1" id="uplift-detail">—</div>
-                                </div>
-                            </div>
-                        </div>
+                    <input type="range" id="rotationSlider" min="0" max="360" value="45"
+                        class="w-full h-1 bg-[#333] rounded-lg appearance-none cursor-pointer">
+                </div>
 
-                        <div id="check-overturning" class="check-pass rounded-lg p-3">
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center gap-2">
-                                    <span class="text-green-400 text-lg" id="overturning-icon">✓</span>
-                                    <div>
-                                        <div class="text-sm font-medium">Overturning Safety</div>
-                                        <div class="text-xs text-slate-400">FS<sub>OT</sub> ≥ 2.0</div>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <span class="text-xs px-2 py-0.5 rounded bg-green-500/20 text-green-400" id="overturning-status">OK</span>
-                                    <div class="text-xs mono text-slate-400 mt-1" id="overturning-detail">—</div>
-                                </div>
-                            </div>
+                <!-- Legend -->
+                <div class="absolute bottom-4 right-4 glass-panel rounded-lg p-3">
+                    <div class="text-[10px] text-[#666] uppercase mb-2">Pressure (ksf)</div>
+                    <div class="flex gap-2 items-center">
+                        <div class="w-3 h-20 rounded"
+                            style="background: linear-gradient(to bottom, #ef4444, #F97316, #D4AF37, #22c55e, #3b82f6);">
                         </div>
-
-                        <div id="check-sliding" class="check-pass rounded-lg p-3">
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center gap-2">
-                                    <span class="text-green-400 text-lg" id="sliding-icon">✓</span>
-                                    <div>
-                                        <div class="text-sm font-medium">Sliding Resistance</div>
-                                        <div class="text-xs text-slate-400">FS<sub>SL</sub> ≥ 1.5</div>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <span class="text-xs px-2 py-0.5 rounded bg-green-500/20 text-green-400" id="sliding-status">OK</span>
-                                    <div class="text-xs mono text-slate-400 mt-1" id="sliding-detail">—</div>
-                                </div>
-                            </div>
+                        <div class="flex flex-col justify-between h-20 text-[10px] mono text-[#999]">
+                            <span id="legend-max">4.0</span>
+                            <span id="legend-mid">2.0</span>
+                            <span id="legend-min">0</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Strength Design Checks -->
-                <div class="panel rounded-lg">
-                    <div class="panel-header px-4 py-2 rounded-t-lg">
-                        <h2 class="text-sm font-semibold text-slate-200">Strength Design Checks (ACI 318-19)</h2>
+                <!-- Corner Values Overlay -->
+                <div class="absolute top-4 right-4 grid grid-cols-2 gap-2">
+                    <div class="glass-panel px-3 py-2 rounded text-right">
+                        <div class="text-[9px] text-[#666] uppercase">q1</div>
+                        <div class="text-sm font-bold mono text-[#ef4444]" id="q1-val">-</div>
                     </div>
-                    <div class="p-4 space-y-2">
-                        <div id="check-oneway" class="check-pass rounded-lg p-3">
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center gap-2">
-                                    <span class="text-green-400 text-lg" id="oneway-icon">✓</span>
-                                    <div>
-                                        <div class="text-sm font-medium">One-Way Shear</div>
-                                        <div class="text-xs text-slate-400">V<sub>u</sub> ≤ φV<sub>c</sub> (§22.5)</div>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <span class="text-xs px-2 py-0.5 rounded bg-green-500/20 text-green-400" id="oneway-status">OK</span>
-                                    <div class="text-xs mono text-slate-400 mt-1" id="oneway-detail">—</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="check-punching" class="check-pass rounded-lg p-3">
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center gap-2">
-                                    <span class="text-green-400 text-lg" id="punching-icon">✓</span>
-                                    <div>
-                                        <div class="text-sm font-medium">Two-Way (Punching) Shear</div>
-                                        <div class="text-xs text-slate-400">V<sub>u</sub> ≤ φV<sub>c</sub> (§22.6)</div>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <span class="text-xs px-2 py-0.5 rounded bg-green-500/20 text-green-400" id="punching-status">OK</span>
-                                    <div class="text-xs mono text-slate-400 mt-1" id="punching-detail">—</div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="glass-panel px-3 py-2 rounded text-right">
+                        <div class="text-[9px] text-[#666] uppercase">q2</div>
+                        <div class="text-sm font-bold mono text-[#F97316]" id="q2-val">-</div>
                     </div>
-                </div>
-
-                <!-- Flexural Reinforcement -->
-                <div class="panel rounded-lg">
-                    <div class="panel-header px-4 py-2 rounded-t-lg">
-                        <h2 class="text-sm font-semibold text-slate-200">Flexural Reinforcement Design</h2>
+                    <div class="glass-panel px-3 py-2 rounded text-right">
+                        <div class="text-[9px] text-[#666] uppercase">q4</div>
+                        <div class="text-sm font-bold mono text-[#22c55e]" id="q4-val">-</div>
                     </div>
-                    <div class="p-4">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-slate-800/50 rounded-lg p-3 border border-blue-500/30">
-                                <div class="text-xs text-slate-400 mb-2">Long Direction (L)</div>
-                                <div class="text-xl font-bold text-blue-400 mono" id="rebar-L">#6 @ 12" o.c.</div>
-                                <div class="text-xs text-slate-500 mt-2">
-                                    <div>A<sub>s,req</sub> = <span class="mono" id="as-L-req">—</span> in²</div>
-                                    <div>A<sub>s,prov</sub> = <span class="mono" id="as-L-prov">—</span> in²</div>
-                                </div>
-                            </div>
-                            <div class="bg-slate-800/50 rounded-lg p-3 border border-purple-500/30">
-                                <div class="text-xs text-slate-400 mb-2">Short Direction (B)</div>
-                                <div class="text-xl font-bold text-purple-400 mono" id="rebar-B">#6 @ 12" o.c.</div>
-                                <div class="text-xs text-slate-500 mt-2">
-                                    <div>A<sub>s,req</sub> = <span class="mono" id="as-B-req">—</span> in²</div>
-                                    <div>A<sub>s,prov</sub> = <span class="mono" id="as-B-prov">—</span> in²</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="grid grid-cols-3 gap-3 mt-4">
-                            <div class="result-row flex-col items-start gap-1">
-                                <span class="result-label">Effective Depth, d</span>
-                                <span class="result-value" id="eff-depth">—</span>
-                            </div>
-                            <div class="result-row flex-col items-start gap-1">
-                                <span class="result-label">Min. Steel Ratio</span>
-                                <span class="result-value" id="min-rho">—</span>
-                            </div>
-                            <div class="result-row flex-col items-start gap-1">
-                                <span class="result-label">Development Length</span>
-                                <span class="result-value" id="dev-length">—</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Material Quantities -->
-                <div class="panel rounded-lg">
-                    <div class="panel-header px-4 py-2 rounded-t-lg">
-                        <h2 class="text-sm font-semibold text-slate-200">Material Quantities</h2>
-                    </div>
-                    <div class="p-4">
-                        <div class="grid grid-cols-4 gap-3">
-                            <div class="text-center">
-                                <div class="text-lg font-bold mono text-slate-300" id="qty-concrete">—</div>
-                                <div class="text-[10px] text-slate-500 uppercase">Concrete (CY)</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-lg font-bold mono text-slate-300" id="qty-steel">—</div>
-                                <div class="text-[10px] text-slate-500 uppercase">Rebar (lbs)</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-lg font-bold mono text-slate-300" id="qty-excavation">—</div>
-                                <div class="text-[10px] text-slate-500 uppercase">Excavation (CY)</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-lg font-bold mono text-green-400" id="qty-cost">—</div>
-                                <div class="text-[10px] text-slate-500 uppercase">Est. Cost</div>
-                            </div>
-                        </div>
+                    <div class="glass-panel px-3 py-2 rounded text-right">
+                        <div class="text-[9px] text-[#666] uppercase">q3</div>
+                        <div class="text-sm font-bold mono text-[#D4AF37]" id="q3-val">-</div>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <!-- Footer -->
-        <footer class="text-center mt-4 text-xs text-slate-600">
-            <p>Calculations performed per ACI 318-19 • For preliminary design only • All designs must be verified by a licensed Professional Engineer</p>
-        </footer>
-    </div>
 
+        <!-- RIGHT COLUMN: RESULTS -->
+        <div class="scroll-y py-4 space-y-4">
+            <!-- Stability & Service -->
+            <div class="glass-panel rounded-lg p-4">
+                <h2 class="text-xs font-bold text-[#D4AF37] uppercase mb-4 tracking-wider">Stability Checks</h2>
+                <div class="space-y-2">
+                    <div id="check-bearing" class="check-item flex justify-between items-center p-2 rounded">
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm" id="bearing-icon">✓</span>
+                            <div>
+                                <div class="text-xs font-medium text-white">Bearing</div>
+                                <div class="text-[10px] text-[#555] mono" id="bearing-detail">-</div>
+                            </div>
+                        </div>
+                        <span id="bearing-status" class="text-[10px] px-1.5 py-0.5 rounded bg-[#111]">OK</span>
+                    </div>
+
+                    <div id="check-uplift" class="check-item flex justify-between items-center p-2 rounded">
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm" id="uplift-icon">✓</span>
+                            <div>
+                                <div class="text-xs font-medium text-white">Uplift</div>
+                                <div class="text-[10px] text-[#555] mono" id="uplift-detail">-</div>
+                            </div>
+                        </div>
+                        <span id="uplift-status" class="text-[10px] px-1.5 py-0.5 rounded bg-[#111]">OK</span>
+                    </div>
+
+                    <div id="check-overturning" class="check-item flex justify-between items-center p-2 rounded">
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm" id="overturning-icon">✓</span>
+                            <div>
+                                <div class="text-xs font-medium text-white">Overturning</div>
+                                <div class="text-[10px] text-[#555] mono" id="overturning-detail">-</div>
+                            </div>
+                        </div>
+                        <span id="overturning-status" class="text-[10px] px-1.5 py-0.5 rounded bg-[#111]">OK</span>
+                    </div>
+
+                    <div id="check-sliding" class="check-item flex justify-between items-center p-2 rounded">
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm" id="sliding-icon">✓</span>
+                            <div>
+                                <div class="text-xs font-medium text-white">Sliding</div>
+                                <div class="text-[10px] text-[#555] mono" id="sliding-detail">-</div>
+                            </div>
+                        </div>
+                        <span id="sliding-status" class="text-[10px] px-1.5 py-0.5 rounded bg-[#111]">OK</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Strength -->
+            <div class="glass-panel rounded-lg p-4">
+                <h2 class="text-xs font-bold text-[#D4AF37] uppercase mb-4 tracking-wider">Strength (ACI 318)</h2>
+                <div class="space-y-2">
+                    <div id="check-oneway" class="check-item flex justify-between items-center p-2 rounded">
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm" id="oneway-icon">✓</span>
+                            <div>
+                                <div class="text-xs font-medium text-white">One-Way Shear</div>
+                                <div class="text-[10px] text-[#555] mono" id="oneway-detail">-</div>
+                            </div>
+                        </div>
+                        <span id="oneway-status" class="text-[10px] px-1.5 py-0.5 rounded bg-[#111]">OK</span>
+                    </div>
+
+                    <div id="check-punching" class="check-item flex justify-between items-center p-2 rounded">
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm" id="punching-icon">✓</span>
+                            <div>
+                                <div class="text-xs font-medium text-white">Two-Way Shear</div>
+                                <div class="text-[10px] text-[#555] mono" id="punching-detail">-</div>
+                            </div>
+                        </div>
+                        <span id="punching-status" class="text-[10px] px-1.5 py-0.5 rounded bg-[#111]">OK</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reinforcement -->
+            <div class="glass-panel rounded-lg p-4">
+                <h2 class="text-xs font-bold text-[#D4AF37] uppercase mb-4 tracking-wider">Reinforcement</h2>
+                <div class="border border-[#333] rounded mb-3 p-3 bg-[#111]">
+                    <div class="flex justify-between items-end mb-2">
+                        <span class="text-[10px] text-[#666] uppercase">Long Direction</span>
+                        <span class="text-sm font-bold text-[#3b82f6] mono" id="rebar-L">-</span>
+                    </div>
+                    <div class="flex justify-between text-[10px] text-[#555] mono">
+                        <span>As,req: <span id="as-L-req" class="text-[#888]">-</span></span>
+                        <span>As,prov: <span id="as-L-prov" class="text-[#888]">-</span></span>
+                    </div>
+                </div>
+                <div class="border border-[#333] rounded p-3 bg-[#111]">
+                    <div class="flex justify-between items-end mb-2">
+                        <span class="text-[10px] text-[#666] uppercase">Short Direction</span>
+                        <span class="text-sm font-bold text-[#8b5cf6] mono" id="rebar-B">-</span>
+                    </div>
+                    <div class="flex justify-between text-[10px] text-[#555] mono">
+                        <span>As,req: <span id="as-B-req" class="text-[#888]">-</span></span>
+                        <span>As,prov: <span id="as-B-prov" class="text-[#888]">-</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bill of Materials -->
+            <div class="glass-panel rounded-lg p-4">
+                <h2 class="text-xs font-bold text-[#D4AF37] uppercase mb-4 tracking-wider">Totals</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <div class="text-[10px] text-[#666]">Concrete</div>
+                        <div class="text-sm mono text-white"><span id="qty-concrete">-</span> CY</div>
+                    </div>
+                    <div>
+                        <div class="text-[10px] text-[#666]">Steel</div>
+                        <div class="text-sm mono text-white"><span id="qty-steel">-</span> lbs</div>
+                    </div>
+                    <div>
+                        <div class="text-[10px] text-[#666]">Excavation</div>
+                        <div class="text-sm mono text-white"><span id="qty-excavation">-</span> CY</div>
+                    </div>
+                    <div>
+                        <div class="text-[10px] text-[#666]">Est. Cost</div>
+                        <div class="text-sm mono text-[#22c55e]" id="qty-cost">-</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
     <script>
         // ==================== GLOBAL STATE ====================
         let currentView = 'stress3d';
@@ -751,39 +748,39 @@
         // ==================== MAIN CALCULATION ====================
         function calculate() {
             const inp = getInputs();
-            
+
             // Geometry
             const A = inp.L * inp.B;                                    // ft²
             const Sx = (inp.B * inp.L * inp.L) / 6;                     // ft³
             const Sy = (inp.L * inp.B * inp.B) / 6;                     // ft³
-            
+
             // Self-weight calculations
             const Wfooting = inp.L * inp.B * (inp.h / 12) * inp.gammaConcrete / 1000;  // kips
             const Wsoil = inp.L * inp.B * (inp.D - inp.h / 12) * inp.gammaSoil / 1000; // kips
             const Ptotal = inp.P + Wfooting + Wsoil;                    // kips
-            
+
             // Eccentricities
             const ex = inp.P > 0 ? inp.Mx / inp.P : 0;                  // ft
             const ey = inp.P > 0 ? inp.My / inp.P : 0;                  // ft
-            
+
             // Bearing pressures at corners (ksf)
-            const q1 = Ptotal/A + inp.Mx/Sx + inp.My/Sy;
-            const q2 = Ptotal/A + inp.Mx/Sx - inp.My/Sy;
-            const q3 = Ptotal/A - inp.Mx/Sx - inp.My/Sy;
-            const q4 = Ptotal/A - inp.Mx/Sx + inp.My/Sy;
-            
+            const q1 = Ptotal / A + inp.Mx / Sx + inp.My / Sy;
+            const q2 = Ptotal / A + inp.Mx / Sx - inp.My / Sy;
+            const q3 = Ptotal / A - inp.Mx / Sx - inp.My / Sy;
+            const q4 = Ptotal / A - inp.Mx / Sx + inp.My / Sy;
+
             const qmax = Math.max(q1, q2, q3, q4);
             const qmin = Math.min(q1, q2, q3, q4);
             const qavg = Ptotal / A;
-            
+
             // Effective depth (inches)
             const barDia = 0.75; // Assume #6 bars
             const d = inp.h - inp.cover - barDia / 2;
-            
+
             // ============ STABILITY CHECKS ============
             const bearingPass = qmax <= inp.qa;
             const upliftPass = qmin >= 0;
-            
+
             // Overturning
             const Mr_x = Ptotal * (inp.L / 2);                          // kip-ft
             const Mo_x = Math.abs(inp.Mx) + inp.H * (inp.h / 12);       // kip-ft
@@ -793,74 +790,74 @@
             const FS_overturn_y = Mr_y / Math.max(Mo_y, 0.001);
             const FS_overturn = Math.min(FS_overturn_x, FS_overturn_y);
             const overturningPass = FS_overturn >= 2.0;
-            
+
             // Sliding
             const Fr = inp.mu * Ptotal;                                  // kips
             const FS_sliding = inp.H > 0 ? Fr / inp.H : 999;
             const slidingPass = inp.H <= 0 || FS_sliding >= 1.5;
-            
+
             // ============ STRENGTH DESIGN ============
             // Use average load factor for simplicity
             const avgLF = (inp.lfDead + inp.lfLive) / 2;
             const qu = qmax * avgLF;                                     // ksf (factored)
-            
+
             // One-way shear (beam shear)
             const colL_ft = inp.colL / 12;
             const colB_ft = inp.colB / 12;
             const d_ft = d / 12;
-            
+
             const cantilever_L = (inp.L - colL_ft) / 2;
             const criticalDist_1way = Math.max(cantilever_L - d_ft, 0);
             const Vu_1way = qu * inp.B * criticalDist_1way;              // kips
-            
+
             const phi_shear = 0.75;
             const lambda = 1.0; // Normal weight concrete
             const Vc_1way = phi_shear * 2 * lambda * Math.sqrt(inp.fc) * inp.B * 12 * d / 1000;  // kips
             const oneWayPass = Vu_1way <= Vc_1way;
-            
+
             // Two-way (punching) shear
             const bo = 2 * ((inp.colL + d) + (inp.colB + d));            // inches
             const Acp = ((inp.colL + d) / 12) * ((inp.colB + d) / 12);   // ft²
             const Vu_punch = (Ptotal * avgLF) - (qu * Acp);              // kips
-            
+
             const beta_c = Math.max(inp.colL, inp.colB) / Math.min(inp.colL, inp.colB);
             const alpha_s = 40; // Interior column
-            
+
             const Vc_punch_1 = phi_shear * 4 * lambda * Math.sqrt(inp.fc) * bo * d / 1000;
-            const Vc_punch_2 = phi_shear * (2 + 4/beta_c) * lambda * Math.sqrt(inp.fc) * bo * d / 1000;
+            const Vc_punch_2 = phi_shear * (2 + 4 / beta_c) * lambda * Math.sqrt(inp.fc) * bo * d / 1000;
             const Vc_punch_3 = phi_shear * (alpha_s * d / bo + 2) * lambda * Math.sqrt(inp.fc) * bo * d / 1000;
             const Vc_punch = Math.min(Vc_punch_1, Vc_punch_2, Vc_punch_3);
             const punchingPass = Vu_punch <= Vc_punch;
-            
+
             // ============ FLEXURAL DESIGN ============
             const phi_flex = 0.9;
             const cantL = (inp.L - colL_ft) / 2;                         // ft
             const cantB = (inp.B - colB_ft) / 2;                         // ft
-            
+
             const Mu_L = 0.5 * qu * inp.B * cantL * cantL;               // kip-ft
             const Mu_B = 0.5 * qu * inp.L * cantB * cantB;               // kip-ft
-            
+
             // Required steel area
             const Rn_L = Mu_L * 12000 / (phi_flex * inp.B * 12 * d * d); // psi
             const Rn_B = Mu_B * 12000 / (phi_flex * inp.L * 12 * d * d); // psi
-            
+
             const m = inp.fy / (0.85 * inp.fc);
-            const rho_L = (1/m) * (1 - Math.sqrt(Math.max(0, 1 - 2 * m * Rn_L / inp.fy)));
-            const rho_B = (1/m) * (1 - Math.sqrt(Math.max(0, 1 - 2 * m * Rn_B / inp.fy)));
-            
+            const rho_L = (1 / m) * (1 - Math.sqrt(Math.max(0, 1 - 2 * m * Rn_L / inp.fy)));
+            const rho_B = (1 / m) * (1 - Math.sqrt(Math.max(0, 1 - 2 * m * Rn_B / inp.fy)));
+
             // Minimum steel ratio (ACI 318-19 Table 7.6.1.1)
             const rho_min = Math.max(0.0018, 200 / inp.fy);
-            
+
             const As_L_req = Math.max(rho_L, rho_min) * inp.B * 12 * d;  // in²
             const As_B_req = Math.max(rho_B, rho_min) * inp.L * 12 * d;  // in²
-            
+
             // Select bars
             const rebarL = selectRebar(As_L_req, inp.B * 12, d);
             const rebarB = selectRebar(As_B_req, inp.L * 12, d);
-            
+
             // Development length (simplified)
             const ld = Math.max(12, (inp.fy * 0.75) / (25 * Math.sqrt(inp.fc)));
-            
+
             // Store results
             results = {
                 q1, q2, q3, q4, qmax, qmin, qavg,
@@ -873,7 +870,7 @@
                 rebarL, rebarB, d, rho_min, ld,
                 inp
             };
-            
+
             updateUI();
             drawVisualization();
         }
@@ -881,16 +878,16 @@
         function selectRebar(As_req, width, d) {
             const sizes = ['#5', '#6', '#7', '#8', '#9'];
             let best = { size: '#6', spacing: 12, num: 0, As_prov: 0 };
-            
+
             for (const size of sizes) {
                 const bar = barData[size];
                 // Try different spacings
                 for (let spacing = 6; spacing <= 18; spacing += 1) {
                     const num = Math.floor((width - 6) / spacing) + 1; // 3" edge each side
                     const As_prov = num * bar.area;
-                    
+
                     if (As_prov >= As_req) {
-                        if (!best.As_prov || spacing > best.spacing || 
+                        if (!best.As_prov || spacing > best.spacing ||
                             (spacing === best.spacing && bar.area < barData[best.size].area)) {
                             best = { size, spacing, num, As_prov };
                         }
@@ -898,7 +895,7 @@
                     }
                 }
             }
-            
+
             return best;
         }
 
@@ -906,56 +903,54 @@
         function updateUI() {
             const r = results;
             const inp = r.inp;
-            
+
             // Date
             document.getElementById('currentDate').textContent = new Date().toLocaleDateString();
-            
+
             // Quick stats
-            document.getElementById('stat-load').textContent = inp.P.toFixed(0);
-            
+            // document.getElementById('stat-load').textContent = inp.P.toFixed(0);
+
             const utilization = Math.min(150, (r.qmax / inp.qa * 100));
             document.getElementById('stat-bearing').textContent = utilization.toFixed(0) + '%';
-            document.getElementById('stat-bearing').className = `text-2xl font-bold mono ${
-                utilization > 100 ? 'text-red-400' : utilization > 85 ? 'text-yellow-400' : 'text-green-400'
-            }`;
-            
+            document.getElementById('stat-bearing').className = `text-2xl font-bold mono ${utilization > 100 ? 'text-red-400' : utilization > 85 ? 'text-yellow-400' : 'text-green-400'
+                }`;
+
             document.getElementById('stat-size').textContent = `${formatFeetInches(inp.L)} × ${formatFeetInches(inp.B)}`;
             document.getElementById('stat-depth').textContent = inp.h + '"';
-            
+
             // Overall status
             const checks = [r.bearingPass, r.upliftPass, r.overturningPass, r.slidingPass, r.oneWayPass, r.punchingPass];
             const passCount = checks.filter(Boolean).length;
             const allPass = passCount === 6;
-            
+
             const statusEl = document.getElementById('overall-status');
-            statusEl.className = `px-6 py-2 rounded-lg font-bold text-lg flex items-center gap-2 ${
-                allPass ? 'bg-green-600/30 text-green-400 border border-green-500/50' : 
-                'bg-red-600/30 text-red-400 border border-red-500/50'
-            }`;
+            statusEl.className = `px-4 py-1.5 rounded border flex items-center gap-2 ${allPass ? 'bg-[#111] text-[#22c55e] border-[#22c55e]' :
+                'bg-[#111] text-[#ef4444] border-[#ef4444]'
+                }`;
             document.getElementById('status-icon').textContent = allPass ? '✓' : '✗';
             document.getElementById('status-text').textContent = allPass ? 'DESIGN OK' : 'DESIGN NG';
-            document.getElementById('check-summary').textContent = `${passCount}/6 Checks Pass`;
-            
+            // document.getElementById('check-summary').textContent = `${passCount}/6 Checks Pass`;
+
             // Corner pressures
             document.getElementById('q1-val').textContent = r.q1.toFixed(2);
             document.getElementById('q2-val').textContent = r.q2.toFixed(2);
             document.getElementById('q3-val').textContent = r.q3.toFixed(2);
             document.getElementById('q4-val').textContent = r.q4.toFixed(2);
-            
+
             // Legend
             document.getElementById('legend-max').textContent = inp.qa.toFixed(1);
             document.getElementById('legend-mid').textContent = (inp.qa / 2).toFixed(1);
-            
+
             // Stability checks
             updateCheck('bearing', r.bearingPass, `${r.qmax.toFixed(2)} ≤ ${inp.qa.toFixed(2)} ksf`);
             updateCheck('uplift', r.upliftPass, `q_min = ${r.qmin.toFixed(2)} ksf`);
             updateCheck('overturning', r.overturningPass, `FS = ${r.FS_overturn.toFixed(2)}`);
             updateCheck('sliding', r.slidingPass, `FS = ${r.FS_sliding.toFixed(2)}`);
-            
+
             // Strength checks
             updateCheck('oneway', r.oneWayPass, `${r.Vu_1way.toFixed(1)} ≤ ${r.Vc_1way.toFixed(1)} kips`);
             updateCheck('punching', r.punchingPass, `${r.Vu_punch.toFixed(1)} ≤ ${r.Vc_punch.toFixed(1)} kips`);
-            
+
             // Reinforcement
             document.getElementById('rebar-L').textContent = `${r.rebarL.size} @ ${r.rebarL.spacing}" o.c.`;
             document.getElementById('rebar-B').textContent = `${r.rebarB.size} @ ${r.rebarB.spacing}" o.c.`;
@@ -963,17 +958,17 @@
             document.getElementById('as-L-prov').textContent = r.rebarL.As_prov.toFixed(2);
             document.getElementById('as-B-req').textContent = r.As_B_req.toFixed(2);
             document.getElementById('as-B-prov').textContent = r.rebarB.As_prov.toFixed(2);
-            document.getElementById('eff-depth').textContent = r.d.toFixed(1) + '"';
-            document.getElementById('min-rho').textContent = (r.rho_min * 100).toFixed(3) + '%';
-            document.getElementById('dev-length').textContent = r.ld.toFixed(0) + '"';
-            
+            // document.getElementById('eff-depth').textContent = r.d.toFixed(1) + '"';
+            // document.getElementById('min-rho').textContent = (r.rho_min * 100).toFixed(3) + '%';
+            // document.getElementById('dev-length').textContent = r.ld.toFixed(0) + '"';
+
             // Quantities
             const volumeFt3 = inp.L * inp.B * (inp.h / 12);
             const volumeCY = volumeFt3 / 27;
             const steelLbs = (r.rebarL.As_prov * inp.L * 12 + r.rebarB.As_prov * inp.B * 12) * 3.4 / 12; // ~3.4 lb/ft/in²
             const excavationCY = (inp.L + 2) * (inp.B + 2) * inp.D / 27;
             const cost = volumeCY * 200 + steelLbs * 1.5 + excavationCY * 50;
-            
+
             document.getElementById('qty-concrete').textContent = volumeCY.toFixed(1);
             document.getElementById('qty-steel').textContent = Math.round(steelLbs);
             document.getElementById('qty-excavation').textContent = excavationCY.toFixed(1);
@@ -982,17 +977,17 @@
 
         function updateCheck(id, pass, detail) {
             const el = document.getElementById(`check-${id}`);
-            el.className = `${pass ? 'check-pass' : 'check-fail'} rounded-lg p-3`;
-            
+            // Preserve layout classes
+            el.className = `check-item flex justify-between items-center p-2 rounded ${pass ? 'check-pass' : 'check-fail'}`;
+
             document.getElementById(`${id}-icon`).textContent = pass ? '✓' : '✗';
-            document.getElementById(`${id}-icon`).className = `text-lg ${pass ? 'text-green-400' : 'text-red-400'}`;
-            
+            document.getElementById(`${id}-icon`).className = `text-sm ${pass ? 'text-[#22c55e]' : 'text-[#ef4444]'}`;
+
             const statusEl = document.getElementById(`${id}-status`);
             statusEl.textContent = pass ? 'OK' : 'NG';
-            statusEl.className = `text-xs px-2 py-0.5 rounded ${
-                pass ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
-            }`;
-            
+            statusEl.className = `text-[10px] px-1.5 py-0.5 rounded ${pass ? 'bg-[#1a1a1a] text-[#22c55e]' : 'bg-[#1a1a1a] text-[#ef4444]'
+                }`;
+
             document.getElementById(`${id}-detail`).textContent = detail;
         }
 
@@ -1001,11 +996,9 @@
             currentView = view;
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('active');
-                btn.classList.add('bg-slate-700');
             });
             const activeBtn = document.getElementById(`btn-${view}`);
             activeBtn.classList.add('active');
-            activeBtn.classList.remove('bg-slate-700');
             drawVisualization();
         }
 
@@ -1028,8 +1021,8 @@
             const W = canvas.width / (window.devicePixelRatio || 1);
             const H = canvas.height / (window.devicePixelRatio || 1);
             ctx.clearRect(0, 0, W, H);
-            
-            switch(currentView) {
+
+            switch (currentView) {
                 case 'stress3d': draw3DStress(W, H); break;
                 case 'section': drawSection(W, H); break;
                 case 'plan': drawPlan(W, H); break;
@@ -1059,12 +1052,12 @@
             const r = results;
             if (!r.inp) return;
             const inp = r.inp;
-            
+
             const cx = W / 2;
             const cy = H / 2 - 20;
             const scale = Math.min(W, H) / 30;
             const angle = rotation * Math.PI / 180;
-            
+
             function iso(x, y, z) {
                 const rotX = x * Math.cos(angle) - y * Math.sin(angle);
                 const rotY = x * Math.sin(angle) + y * Math.cos(angle);
@@ -1073,27 +1066,27 @@
                     y: cy + rotY * scale * 0.38 - z * scale
                 };
             }
-            
+
             const L = inp.L;
             const B = inp.B;
             const h = inp.h / 12;
-            
+
             // Stress particles
             particles.forEach(p => {
                 const spread = 1 + Math.abs(p.z) * 0.2;
-                const x = p.x * (L/2) * spread;
-                const y = p.y * (B/2) * spread;
-                
+                const x = p.x * (L / 2) * spread;
+                const y = p.y * (B / 2) * spread;
+
                 const xRatio = (p.x + 1) / 2;
                 const yRatio = (p.y + 1) / 2;
-                const stress = r.q4 * (1-xRatio) * (1-yRatio) + 
-                              r.q3 * xRatio * (1-yRatio) + 
-                              r.q2 * xRatio * yRatio + 
-                              r.q1 * (1-xRatio) * yRatio;
-                
+                const stress = r.q4 * (1 - xRatio) * (1 - yRatio) +
+                    r.q3 * xRatio * (1 - yRatio) +
+                    r.q2 * xRatio * yRatio +
+                    r.q1 * (1 - xRatio) * yRatio;
+
                 const atten = 1 / (1 + Math.abs(p.z) * 0.35);
                 const s = stress * atten;
-                
+
                 if (s > r.qmax * 0.05) {
                     const pt = iso(x, y, p.z);
                     ctx.beginPath();
@@ -1102,42 +1095,42 @@
                     ctx.fill();
                 }
             });
-            
+
             // Stress contours
             for (let depth = 0; depth < 8; depth += 1) {
                 const atten = 1 / (1 + depth * 0.35);
                 const spread = 1 + depth * 0.2;
-                
+
                 ctx.strokeStyle = getStressColor(r.qavg * atten, inp.qa, 0.25);
                 ctx.lineWidth = 1;
                 ctx.beginPath();
-                
+
                 const pts = [
-                    iso(-L/2 * spread, -B/2 * spread, -depth),
-                    iso(L/2 * spread, -B/2 * spread, -depth),
-                    iso(L/2 * spread, B/2 * spread, -depth),
-                    iso(-L/2 * spread, B/2 * spread, -depth)
+                    iso(-L / 2 * spread, -B / 2 * spread, -depth),
+                    iso(L / 2 * spread, -B / 2 * spread, -depth),
+                    iso(L / 2 * spread, B / 2 * spread, -depth),
+                    iso(-L / 2 * spread, B / 2 * spread, -depth)
                 ];
-                
+
                 ctx.moveTo(pts[0].x, pts[0].y);
                 pts.forEach(p => ctx.lineTo(p.x, p.y));
                 ctx.closePath();
                 ctx.stroke();
             }
-            
+
             // Footing base gradient
             const footingPts = [
-                iso(-L/2, -B/2, 0),
-                iso(L/2, -B/2, 0),
-                iso(L/2, B/2, 0),
-                iso(-L/2, B/2, 0)
+                iso(-L / 2, -B / 2, 0),
+                iso(L / 2, -B / 2, 0),
+                iso(L / 2, B / 2, 0),
+                iso(-L / 2, B / 2, 0)
             ];
-            
+
             const grd = ctx.createLinearGradient(footingPts[0].x, footingPts[0].y, footingPts[2].x, footingPts[2].y);
             grd.addColorStop(0, getStressColor(r.q4, inp.qa, 0.85));
             grd.addColorStop(0.5, getStressColor(r.qavg, inp.qa, 0.85));
             grd.addColorStop(1, getStressColor(r.q2, inp.qa, 0.85));
-            
+
             ctx.beginPath();
             ctx.moveTo(footingPts[0].x, footingPts[0].y);
             footingPts.forEach(p => ctx.lineTo(p.x, p.y));
@@ -1147,33 +1140,33 @@
             ctx.strokeStyle = '#3b82f6';
             ctx.lineWidth = 2;
             ctx.stroke();
-            
+
             // Footing sides
             ctx.fillStyle = '#475569';
             ctx.beginPath();
-            ctx.moveTo(iso(-L/2, B/2, 0).x, iso(-L/2, B/2, 0).y);
-            ctx.lineTo(iso(L/2, B/2, 0).x, iso(L/2, B/2, 0).y);
-            ctx.lineTo(iso(L/2, B/2, h).x, iso(L/2, B/2, h).y);
-            ctx.lineTo(iso(-L/2, B/2, h).x, iso(-L/2, B/2, h).y);
+            ctx.moveTo(iso(-L / 2, B / 2, 0).x, iso(-L / 2, B / 2, 0).y);
+            ctx.lineTo(iso(L / 2, B / 2, 0).x, iso(L / 2, B / 2, 0).y);
+            ctx.lineTo(iso(L / 2, B / 2, h).x, iso(L / 2, B / 2, h).y);
+            ctx.lineTo(iso(-L / 2, B / 2, h).x, iso(-L / 2, B / 2, h).y);
             ctx.closePath();
             ctx.fill();
             ctx.stroke();
-            
+
             ctx.fillStyle = '#52616d';
             ctx.beginPath();
-            ctx.moveTo(iso(L/2, -B/2, 0).x, iso(L/2, -B/2, 0).y);
-            ctx.lineTo(iso(L/2, B/2, 0).x, iso(L/2, B/2, 0).y);
-            ctx.lineTo(iso(L/2, B/2, h).x, iso(L/2, B/2, h).y);
-            ctx.lineTo(iso(L/2, -B/2, h).x, iso(L/2, -B/2, h).y);
+            ctx.moveTo(iso(L / 2, -B / 2, 0).x, iso(L / 2, -B / 2, 0).y);
+            ctx.lineTo(iso(L / 2, B / 2, 0).x, iso(L / 2, B / 2, 0).y);
+            ctx.lineTo(iso(L / 2, B / 2, h).x, iso(L / 2, B / 2, h).y);
+            ctx.lineTo(iso(L / 2, -B / 2, h).x, iso(L / 2, -B / 2, h).y);
             ctx.closePath();
             ctx.fill();
             ctx.stroke();
-            
+
             // Top face
             ctx.fillStyle = '#64748b';
             const topPts = [
-                iso(-L/2, -B/2, h), iso(L/2, -B/2, h),
-                iso(L/2, B/2, h), iso(-L/2, B/2, h)
+                iso(-L / 2, -B / 2, h), iso(L / 2, -B / 2, h),
+                iso(L / 2, B / 2, h), iso(-L / 2, B / 2, h)
             ];
             ctx.beginPath();
             ctx.moveTo(topPts[0].x, topPts[0].y);
@@ -1182,38 +1175,38 @@
             ctx.fill();
             ctx.strokeStyle = '#94a3b8';
             ctx.stroke();
-            
+
             // Column
             const cL = inp.colL / 12;
             const cB = inp.colB / 12;
             const colH = 3;
-            
+
             ctx.fillStyle = '#374151';
             ctx.beginPath();
-            ctx.moveTo(iso(-cL/2, cB/2, h).x, iso(-cL/2, cB/2, h).y);
-            ctx.lineTo(iso(cL/2, cB/2, h).x, iso(cL/2, cB/2, h).y);
-            ctx.lineTo(iso(cL/2, cB/2, h+colH).x, iso(cL/2, cB/2, h+colH).y);
-            ctx.lineTo(iso(-cL/2, cB/2, h+colH).x, iso(-cL/2, cB/2, h+colH).y);
+            ctx.moveTo(iso(-cL / 2, cB / 2, h).x, iso(-cL / 2, cB / 2, h).y);
+            ctx.lineTo(iso(cL / 2, cB / 2, h).x, iso(cL / 2, cB / 2, h).y);
+            ctx.lineTo(iso(cL / 2, cB / 2, h + colH).x, iso(cL / 2, cB / 2, h + colH).y);
+            ctx.lineTo(iso(-cL / 2, cB / 2, h + colH).x, iso(-cL / 2, cB / 2, h + colH).y);
             ctx.closePath();
             ctx.fill();
             ctx.strokeStyle = '#1f2937';
             ctx.stroke();
-            
+
             ctx.fillStyle = '#4b5563';
             ctx.beginPath();
-            ctx.moveTo(iso(cL/2, -cB/2, h).x, iso(cL/2, -cB/2, h).y);
-            ctx.lineTo(iso(cL/2, cB/2, h).x, iso(cL/2, cB/2, h).y);
-            ctx.lineTo(iso(cL/2, cB/2, h+colH).x, iso(cL/2, cB/2, h+colH).y);
-            ctx.lineTo(iso(cL/2, -cB/2, h+colH).x, iso(cL/2, -cB/2, h+colH).y);
+            ctx.moveTo(iso(cL / 2, -cB / 2, h).x, iso(cL / 2, -cB / 2, h).y);
+            ctx.lineTo(iso(cL / 2, cB / 2, h).x, iso(cL / 2, cB / 2, h).y);
+            ctx.lineTo(iso(cL / 2, cB / 2, h + colH).x, iso(cL / 2, cB / 2, h + colH).y);
+            ctx.lineTo(iso(cL / 2, -cB / 2, h + colH).x, iso(cL / 2, -cB / 2, h + colH).y);
             ctx.closePath();
             ctx.fill();
             ctx.stroke();
-            
+
             // Column top
             ctx.fillStyle = '#6b7280';
             const colTop = [
-                iso(-cL/2, -cB/2, h+colH), iso(cL/2, -cB/2, h+colH),
-                iso(cL/2, cB/2, h+colH), iso(-cL/2, cB/2, h+colH)
+                iso(-cL / 2, -cB / 2, h + colH), iso(cL / 2, -cB / 2, h + colH),
+                iso(cL / 2, cB / 2, h + colH), iso(-cL / 2, cB / 2, h + colH)
             ];
             ctx.beginPath();
             ctx.moveTo(colTop[0].x, colTop[0].y);
@@ -1221,18 +1214,18 @@
             ctx.closePath();
             ctx.fill();
             ctx.stroke();
-            
+
             // Load arrow
             const arrowStart = iso(0, 0, h + colH + 4);
             const arrowEnd = iso(0, 0, h + colH + 0.5);
-            
+
             ctx.strokeStyle = '#ef4444';
             ctx.lineWidth = 4;
             ctx.beginPath();
             ctx.moveTo(arrowStart.x, arrowStart.y);
             ctx.lineTo(arrowEnd.x, arrowEnd.y);
             ctx.stroke();
-            
+
             ctx.fillStyle = '#ef4444';
             ctx.beginPath();
             ctx.moveTo(arrowEnd.x, arrowEnd.y + 5);
@@ -1240,56 +1233,56 @@
             ctx.lineTo(arrowEnd.x + 8, arrowEnd.y - 10);
             ctx.closePath();
             ctx.fill();
-            
+
             // Label
             ctx.font = 'bold 13px Inter';
             ctx.fillStyle = 'white';
             ctx.textAlign = 'center';
             ctx.fillText(`P = ${inp.P} kips`, arrowStart.x, arrowStart.y - 10);
-            
+
             // Dimensions
             ctx.font = '11px Inter';
             ctx.fillStyle = '#94a3b8';
-            ctx.fillText(`L = ${formatFeetInches(L)}`, iso(0, B/2 + 1, h/2).x, iso(0, B/2 + 1, h/2).y);
-            ctx.fillText(`B = ${formatFeetInches(B)}`, iso(L/2 + 1, 0, h/2).x, iso(L/2 + 1, 0, h/2).y);
+            ctx.fillText(`L = ${formatFeetInches(L)}`, iso(0, B / 2 + 1, h / 2).x, iso(0, B / 2 + 1, h / 2).y);
+            ctx.fillText(`B = ${formatFeetInches(B)}`, iso(L / 2 + 1, 0, h / 2).x, iso(L / 2 + 1, 0, h / 2).y);
         }
 
         function drawSection(W, H) {
             const r = results;
             if (!r.inp) return;
             const inp = r.inp;
-            
+
             const padding = 60;
-            const scale = Math.min((W - 2*padding) / (inp.L * 1.5), (H - 2*padding) / 15);
+            const scale = Math.min((W - 2 * padding) / (inp.L * 1.5), (H - 2 * padding) / 15);
             const cx = W / 2;
             const groundY = 100;
-            
+
             // Soil background
             const soilGrad = ctx.createLinearGradient(0, groundY, 0, H);
             soilGrad.addColorStop(0, '#5d4e37');
             soilGrad.addColorStop(1, '#3d2d1f');
             ctx.fillStyle = soilGrad;
             ctx.fillRect(0, groundY, W, H - groundY);
-            
+
             const L_px = inp.L * scale;
             const h_px = (inp.h / 12) * scale;
             const D_px = inp.D * scale;
-            
+
             const footingLeft = cx - L_px / 2;
             const footingRight = cx + L_px / 2;
             const footingBottom = groundY + D_px;
             const footingTop = footingBottom - h_px;
-            
+
             // Stress bulb
             for (let depth = 8; depth > 0; depth -= 0.3) {
                 const atten = 1 / (1 + depth * 0.35);
                 const spread = 1 + depth * 0.25;
                 const stress = r.qavg * atten;
-                
+
                 const bL = cx - (L_px / 2) * spread;
                 const bR = cx + (L_px / 2) * spread;
                 const y = footingBottom + depth * scale;
-                
+
                 ctx.strokeStyle = getStressColor(stress, inp.qa, 0.5 * atten);
                 ctx.lineWidth = 3;
                 ctx.beginPath();
@@ -1297,14 +1290,14 @@
                 ctx.quadraticCurveTo(cx, y - 3, bR, y);
                 ctx.stroke();
             }
-            
+
             // Footing
             ctx.fillStyle = '#64748b';
             ctx.fillRect(footingLeft, footingTop, L_px, h_px);
             ctx.strokeStyle = '#3b82f6';
             ctx.lineWidth = 2;
             ctx.strokeRect(footingLeft, footingTop, L_px, h_px);
-            
+
             // Rebars
             const rebarY = footingBottom - (inp.cover / 12) * scale;
             const numBars = Math.min(9, r.rebarL.num);
@@ -1315,15 +1308,15 @@
                 ctx.arc(x, rebarY - 5, 4, 0, Math.PI * 2);
                 ctx.fill();
             }
-            
+
             // Column
             const colW = (inp.colL / 12) * scale;
             const colH_px = 80;
             ctx.fillStyle = '#475569';
-            ctx.fillRect(cx - colW/2, footingTop - colH_px, colW, colH_px);
+            ctx.fillRect(cx - colW / 2, footingTop - colH_px, colW, colH_px);
             ctx.strokeStyle = '#64748b';
-            ctx.strokeRect(cx - colW/2, footingTop - colH_px, colW, colH_px);
-            
+            ctx.strokeRect(cx - colW / 2, footingTop - colH_px, colW, colH_px);
+
             // Ground line
             ctx.strokeStyle = '#22c55e';
             ctx.lineWidth = 3;
@@ -1331,22 +1324,22 @@
             ctx.moveTo(0, groundY);
             ctx.lineTo(W, groundY);
             ctx.stroke();
-            
+
             // Pressure arrows
             const numArrows = 9;
             ctx.lineWidth = 2;
             for (let i = 0; i < numArrows; i++) {
                 const t = i / (numArrows - 1);
                 const x = footingLeft + t * L_px;
-                const q = r.q4 * (1-t) + r.q3 * t;
+                const q = r.q4 * (1 - t) + r.q3 * t;
                 const arrowH = Math.max(12, (q / inp.qa) * 40);
-                
+
                 ctx.strokeStyle = getStressColor(q, inp.qa, 0.8);
                 ctx.beginPath();
                 ctx.moveTo(x, footingBottom + 8);
                 ctx.lineTo(x, footingBottom + 8 + arrowH);
                 ctx.stroke();
-                
+
                 ctx.fillStyle = getStressColor(q, inp.qa, 0.8);
                 ctx.beginPath();
                 ctx.moveTo(x, footingBottom + 8);
@@ -1355,14 +1348,14 @@
                 ctx.closePath();
                 ctx.fill();
             }
-            
+
             // Labels
             ctx.font = '12px Inter';
             ctx.fillStyle = 'white';
             ctx.textAlign = 'center';
             ctx.fillText(`L = ${formatFeetInches(inp.L)}`, cx, footingBottom + 70);
             ctx.fillText(`q_max = ${r.qmax.toFixed(2)} ksf`, cx, footingBottom + 90);
-            
+
             ctx.fillText(`h = ${inp.h}"`, footingRight + 40, (footingTop + footingBottom) / 2);
         }
 
@@ -1370,75 +1363,75 @@
             const r = results;
             if (!r.inp) return;
             const inp = r.inp;
-            
+
             const padding = 60;
-            const scale = Math.min((W - 2*padding) / inp.L, (H - 2*padding) / inp.B) * 0.7;
-            
+            const scale = Math.min((W - 2 * padding) / inp.L, (H - 2 * padding) / inp.B) * 0.7;
+
             const cx = W / 2;
             const cy = H / 2;
             const L_px = inp.L * scale;
             const B_px = inp.B * scale;
             const footingX = cx - L_px / 2;
             const footingY = cy - B_px / 2;
-            
+
             // Stress heat map
             const gridSize = 25;
             for (let i = 0; i < gridSize; i++) {
                 for (let j = 0; j < gridSize; j++) {
                     const xRatio = i / (gridSize - 1);
                     const yRatio = j / (gridSize - 1);
-                    
-                    const stress = r.q4 * (1-xRatio) * (1-yRatio) + 
-                                  r.q3 * xRatio * (1-yRatio) + 
-                                  r.q2 * xRatio * yRatio + 
-                                  r.q1 * (1-xRatio) * yRatio;
-                    
+
+                    const stress = r.q4 * (1 - xRatio) * (1 - yRatio) +
+                        r.q3 * xRatio * (1 - yRatio) +
+                        r.q2 * xRatio * yRatio +
+                        r.q1 * (1 - xRatio) * yRatio;
+
                     ctx.fillStyle = getStressColor(stress, inp.qa, 0.8);
                     ctx.fillRect(
-                        footingX + xRatio * L_px - L_px/(gridSize*2),
-                        footingY + yRatio * B_px - B_px/(gridSize*2),
-                        L_px/gridSize + 1,
-                        B_px/gridSize + 1
+                        footingX + xRatio * L_px - L_px / (gridSize * 2),
+                        footingY + yRatio * B_px - B_px / (gridSize * 2),
+                        L_px / gridSize + 1,
+                        B_px / gridSize + 1
                     );
                 }
             }
-            
+
             // Footing outline
             ctx.strokeStyle = '#3b82f6';
             ctx.lineWidth = 3;
             ctx.strokeRect(footingX, footingY, L_px, B_px);
-            
+
             // Column
             const colL_px = (inp.colL / 12) * scale;
             const colB_px = (inp.colB / 12) * scale;
             ctx.fillStyle = '#1e293b';
-            ctx.fillRect(cx - colL_px/2, cy - colB_px/2, colL_px, colB_px);
+            ctx.fillRect(cx - colL_px / 2, cy - colB_px / 2, colL_px, colB_px);
             ctx.strokeStyle = '#64748b';
             ctx.lineWidth = 2;
-            ctx.strokeRect(cx - colL_px/2, cy - colB_px/2, colL_px, colB_px);
-            
+            ctx.strokeRect(cx - colL_px / 2, cy - colB_px / 2, colL_px, colB_px);
+
             // Critical shear sections
             const d_px = (r.d / 12) * scale;
-            
+
             ctx.setLineDash([6, 4]);
             ctx.strokeStyle = '#f59e0b';
             ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.moveTo(cx - colL_px/2 - d_px, footingY);
-            ctx.lineTo(cx - colL_px/2 - d_px, footingY + B_px);
-            ctx.moveTo(cx + colL_px/2 + d_px, footingY);
-            ctx.lineTo(cx + colL_px/2 + d_px, footingY + B_px);
+            ctx.moveTo(cx - colL_px / 2 - d_px, footingY);
+            ctx.lineTo(cx - colL_px / 2 - d_px, footingY + B_px);
+            ctx.moveTo(cx + colL_px / 2 + d_px, footingY);
+            ctx.lineTo(cx + colL_px / 2 + d_px, footingY + B_px);
             ctx.stroke();
-            
+
             ctx.strokeStyle = '#ef4444';
             ctx.strokeRect(
-                cx - colL_px/2 - d_px/2,
-                cy - colB_px/2 - d_px/2,
+                cx - colL_px / 2 - d_px / 2,
+                cy - colB_px / 2 - d_px / 2,
                 colL_px + d_px,
                 colB_px + d_px
             );
             ctx.setLineDash([]);
-            
+
             // Corner labels
             ctx.font = 'bold 12px JetBrains Mono';
             const corners = [
@@ -1447,25 +1440,25 @@
                 { x: footingX + L_px - 25, y: footingY + B_px - 12, val: r.q3, color: '#eab308' },
                 { x: footingX + 25, y: footingY + B_px - 12, val: r.q4, color: '#22c55e' }
             ];
-            
+
             corners.forEach(c => {
                 ctx.fillStyle = c.color;
                 ctx.textAlign = 'center';
                 ctx.fillText(c.val.toFixed(2), c.x, c.y);
             });
-            
+
             // Dimensions
             ctx.font = '11px Inter';
             ctx.fillStyle = '#94a3b8';
             ctx.textAlign = 'center';
             ctx.fillText(`L = ${formatFeetInches(inp.L)}`, cx, footingY + B_px + 25);
-            
+
             ctx.save();
             ctx.translate(footingX - 20, cy);
             ctx.rotate(-Math.PI / 2);
             ctx.fillText(`B = ${formatFeetInches(inp.B)}`, 0, 0);
             ctx.restore();
-            
+
             // Legend
             ctx.font = '10px Inter';
             ctx.textAlign = 'left';
@@ -1478,7 +1471,7 @@
             ctx.setLineDash([]);
             ctx.fillStyle = 'white';
             ctx.fillText('One-way (d from face)', 50, H - 31);
-            
+
             ctx.setLineDash([6, 4]);
             ctx.strokeStyle = '#ef4444';
             ctx.beginPath();
@@ -1493,29 +1486,29 @@
             const r = results;
             if (!r.inp) return;
             const inp = r.inp;
-            
+
             const padding = 60;
-            const scale = Math.min((W - 2*padding) / inp.L, (H - 2*padding) / inp.B) * 0.7;
-            
+            const scale = Math.min((W - 2 * padding) / inp.L, (H - 2 * padding) / inp.B) * 0.7;
+
             const cx = W / 2;
             const cy = H / 2;
             const L_px = inp.L * scale;
             const B_px = inp.B * scale;
             const footingX = cx - L_px / 2;
             const footingY = cy - B_px / 2;
-            
+
             // Concrete background
             ctx.fillStyle = '#4b5563';
             ctx.fillRect(footingX, footingY, L_px, B_px);
             ctx.strokeStyle = '#3b82f6';
             ctx.lineWidth = 2;
             ctx.strokeRect(footingX, footingY, L_px, B_px);
-            
+
             // Long direction bars
             ctx.lineCap = 'round';
             const numL = Math.min(12, r.rebarL.num);
             const spacingL = (B_px - 30) / (numL - 1);
-            
+
             ctx.strokeStyle = '#3b82f6';
             ctx.lineWidth = 5;
             for (let i = 0; i < numL; i++) {
@@ -1525,11 +1518,11 @@
                 ctx.lineTo(footingX + L_px - 15, y);
                 ctx.stroke();
             }
-            
+
             // Short direction bars
             const numB = Math.min(12, r.rebarB.num);
             const spacingB = (L_px - 30) / (numB - 1);
-            
+
             ctx.strokeStyle = '#8b5cf6';
             for (let i = 0; i < numB; i++) {
                 const x = footingX + 15 + i * spacingB;
@@ -1538,22 +1531,22 @@
                 ctx.lineTo(x, footingY + B_px - 15);
                 ctx.stroke();
             }
-            
+
             // Column outline
             const colL_px = (inp.colL / 12) * scale;
             const colB_px = (inp.colB / 12) * scale;
             ctx.setLineDash([5, 5]);
             ctx.strokeStyle = 'rgba(255,255,255,0.4)';
             ctx.lineWidth = 2;
-            ctx.strokeRect(cx - colL_px/2, cy - colB_px/2, colL_px, colB_px);
+            ctx.strokeRect(cx - colL_px / 2, cy - colB_px / 2, colL_px, colB_px);
             ctx.setLineDash([]);
-            
+
             // Legend
             ctx.font = '11px Inter';
             ctx.textAlign = 'left';
             ctx.lineCap = 'round';
             ctx.lineWidth = 5;
-            
+
             ctx.strokeStyle = '#3b82f6';
             ctx.beginPath();
             ctx.moveTo(20, H - 35);
@@ -1561,44 +1554,44 @@
             ctx.stroke();
             ctx.fillStyle = 'white';
             ctx.fillText(`${r.rebarL.size} @ ${r.rebarL.spacing}" (Long)`, 60, H - 31);
-            
+
             ctx.strokeStyle = '#8b5cf6';
             ctx.beginPath();
-            ctx.moveTo(W/2, H - 35);
-            ctx.lineTo(W/2 + 30, H - 35);
+            ctx.moveTo(W / 2, H - 35);
+            ctx.lineTo(W / 2 + 30, H - 35);
             ctx.stroke();
-            ctx.fillText(`${r.rebarB.size} @ ${r.rebarB.spacing}" (Short)`, W/2 + 40, H - 31);
+            ctx.fillText(`${r.rebarB.size} @ ${r.rebarB.spacing}" (Short)`, W / 2 + 40, H - 31);
         }
 
         // ==================== ACTIONS ====================
         function autoDesign() {
             showNotification('Optimizing footing size...', 'success');
-            
+
             setTimeout(() => {
                 const inp = getInputs();
                 let L = Math.sqrt(inp.P / inp.qa) * 1.4;
                 let B = L;
                 let h = 18;
-                
+
                 L = Math.ceil(L * 2) / 2;
                 B = Math.ceil(B * 2) / 2;
-                L = Math.max(L, inp.colL/12 + 2);
-                B = Math.max(B, inp.colB/12 + 2);
-                
+                L = Math.max(L, inp.colL / 12 + 2);
+                B = Math.max(B, inp.colB / 12 + 2);
+
                 let iterations = 0;
                 let allPass = false;
-                
+
                 while (!allPass && iterations < 30) {
                     document.getElementById('footingL').value = L.toFixed(1);
                     document.getElementById('footingB').value = B.toFixed(1);
                     document.getElementById('footingH').value = h;
-                    
+
                     calculate();
-                    
-                    allPass = results.bearingPass && results.upliftPass && 
-                              results.overturningPass && results.slidingPass &&
-                              results.oneWayPass && results.punchingPass;
-                    
+
+                    allPass = results.bearingPass && results.upliftPass &&
+                        results.overturningPass && results.slidingPass &&
+                        results.oneWayPass && results.punchingPass;
+
                     if (!results.bearingPass || !results.upliftPass) {
                         L += 0.5;
                         B += 0.5;
@@ -1606,10 +1599,10 @@
                     if (!results.punchingPass || !results.oneWayPass) {
                         h += 2;
                     }
-                    
+
                     iterations++;
                 }
-                
+
                 if (allPass) {
                     showNotification('✓ Footing optimized successfully!', 'success');
                 } else {
@@ -1626,16 +1619,16 @@
                 fc: 4000, fy: 60000, qa: 4.0, friction: 0.45, soilGamma: 120,
                 lfDead: 1.2, lfLive: 1.6
             };
-            
+
             Object.keys(defaults).forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.value = defaults[id];
             });
-            
+
             rotation = 45;
             document.getElementById('rotationSlider').value = 45;
             document.getElementById('rotation-val').textContent = '45°';
-            
+
             calculate();
             showNotification('Reset to default values', 'success');
         }
@@ -1649,7 +1642,7 @@
             const inp = r.inp;
             const proj = document.getElementById('projectName').value;
             const eng = document.getElementById('engineerName').value;
-            
+
             const report = `
 ================================================================================
                       SPREAD FOOTING DESIGN CALCULATIONS
@@ -1694,7 +1687,7 @@ DATE: ${new Date().toLocaleDateString()}
 ================================================================================
 
 2.1 Footing Self-Weight
-    Wfooting = ${inp.L} × ${inp.B} × ${(inp.h/12).toFixed(3)} × 150 = ${r.Wfooting.toFixed(2)} kips
+    Wfooting = ${inp.L} × ${inp.B} × ${(inp.h / 12).toFixed(3)} × 150 = ${r.Wfooting.toFixed(2)} kips
 
 2.2 Total Vertical Load
     Ptotal = P + Wfooting + Wsoil = ${r.Ptotal.toFixed(2)} kips
@@ -1773,7 +1766,7 @@ DATE: ${new Date().toLocaleDateString()}
     For preliminary design only - verify by licensed Professional Engineer
 ================================================================================
             `.trim();
-            
+
             const blob = new Blob([report], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -1781,16 +1774,17 @@ DATE: ${new Date().toLocaleDateString()}
             a.download = `${proj.replace(/\s+/g, '_')}_Footing_Calcs.txt`;
             a.click();
             URL.revokeObjectURL(url);
-            
+
             showNotification('Calculations exported!', 'success');
         }
 
         // ==================== INITIALIZATION ====================
-        window.onload = function() {
+        window.onload = function () {
             resizeCanvas();
             calculate();
             animate();
         };
     </script>
 </body>
+
 </html>
