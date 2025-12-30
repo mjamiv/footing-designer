@@ -1,9 +1,19 @@
 {
-  "printWidth": 100,
+  "$schema": "http://json.schemastore.org/prettierrc",
+  "printWidth": 88,
   "tabWidth": 2,
   "useTabs": false,
-  "singleQuote": false,
-  "htmlWhitespaceSensitivity": "css",
+  "semi": true,
+  "singleQuote": true,
+  "quoteProps": "as-needed",
+  "jsxSingleQuote": false,
+  "trailingComma": "all",
+  "bracketSpacing": true,
   "bracketSameLine": false,
-  "endOfLine": "lf"
+  "arrowParens": "always",
+  "endOfLine": "lf",
+  "htmlWhitespaceSensitivity": "css",
+  "embeddedLanguageFormatting": "auto",
+  "proseWrap": "preserve",
+  "singleAttributePerLine": false
 }
